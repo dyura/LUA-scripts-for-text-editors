@@ -1,0 +1,24 @@
+function GoToHighlightedBrace() 
+  function isBrace(char) 
+    if char =='(' or char ==')' or char =='[' or char ==']' or char =='{' or char =='}' then 
+        return 1 
+    else 
+        return 0 
+    end 
+  end 
+  local cur_pos=editor.CurrentPos 
+  local cur_char=string.char(editor.CharAt[cur_pos]) 
+  local prev_pos 
+  local prev_char 
+  if cur_pos > 0 then 
+        prev_pos=cur_pos-1 
+        prev_char=string.char(editor.CharAt[prev_pos]) 
+  end 
+  if isBrace(cur_char)==1 and (cur_pos == 0  or 
+        (cur_pos > 0 and isBrace(prev_char)==0 )) 
+  then  
+        editor:GotoPos(cur_pos+1) 
+  end 
+  scite.MenuCommand(IDM_MATCHBRACE) 
+  editor:GotoPos(editor.CurrentPos+1)  
+end
