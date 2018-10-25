@@ -1,0 +1,32 @@
+-- @ACCEL@ <Control><Shift>k
+function isBrace(char) 
+	if char =='(' or char ==')' or char =='[' or char ==']' or char =='{' or char =='}' then 
+		return 1 
+	else 
+		return 0 
+	end 
+end 
+local prev_pos 
+local prev_char 
+local match_position
+local cur_pos=geany.caret() 
+local cur_char=string.char(geany.byte(cur_pos))  
+if cur_pos > 0 then 
+	prev_pos=cur_pos-1 
+	prev_char=string.char( geany.byte(prev_pos)) 
+	if isBrace(prev_char)==1  
+	then  
+		geany.caret(cur_pos-1)                   
+	end 
+
+end 
+match_position=geany.match(geany.caret()) 
+if match_position > -1 then
+	geany.caret(match_position)   
+	geany.caret(geany.caret()+1)  
+end
+
+--[[
+( ( ( )))
+
+--]]
