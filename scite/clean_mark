@@ -1,0 +1,12 @@
+function clean_mark()
+	str=editor:LineFromPosition(editor.SelectionStart)
+	end1=editor:LineFromPosition(editor.SelectionEnd)
+	editor:MarkerDefine(1,2)
+	print (str)
+	print (end1)
+	local n = str
+	while  end1 +1 > n do
+		editor:MarkerDelete(n,10)
+		n=n+1
+	end
+end
