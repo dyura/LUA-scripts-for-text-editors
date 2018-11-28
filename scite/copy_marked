@@ -1,0 +1,23 @@
+function copy_marked()
+-- copy marked lines
+        local screen_pos=editor.FirstVisibleLine + 1  
+	local n = 0
+	all=""
+	while editor.LineCount > n do
+		editor:GotoLine(n)
+	--print (editor:MarkerGet(editor:LineFromPosition(editor.CurrentPos)))
+	--print(editor:GetLine(n))
+		if editor:MarkerGet(editor:LineFromPosition(editor.CurrentPos)) > 0 then
+			local line=editor:GetLine(n)
+			 all=all..line
+			 --editor:HideLines(n,n)
+			--print ( string.gsub(line, "[\r\n]+$", ""))
+			--editor:LineDelete()
+		end
+		n = n +1
+	end
+        editor:GotoLine(screen_pos)
+	print ("START-MARKED "..props.FileNameExt)
+	 all=all.."END-MARKET"
+	print(all)
+end
