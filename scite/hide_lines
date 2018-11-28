@@ -1,0 +1,62 @@
+function hide_lines(parm)
+-- hide marked/unmarked lines
+-- This mechanism is not really correct for this operation and as the result 
+-- the first line cannot be processed. I should switch to SCI_STYLESETVISIBLE
+-- but ,it's still very useful, just need to keep in mind the first line
+--local keep=props['highlight.current.word']
+--dostring('highlight_current_word()')
+--highlight_current_word()
+--print(props['highlight.current.word'])
+        if parm~='marked' and parm~='unmarked' then
+           print(" parameter could be either: marked or unmarked")
+           return
+        end   
+        --- completely unfold 
+        local last_line=editor.LineCount
+        local lines_on_screen=editor.LinesOnScreen
+        if last_line >  lines_on_screen then 
+                editor:GotoLine(last_line)
+                local first_visible_line=editor.FirstVisibleLine
+                local diff=last_line-first_visible_line
+                while diff ~= lines_on_screen do
+                        scite.MenuCommand(IDM_TOGGLE_FOLDALL)
+                        editor:GotoLine(last_line)
+                        first_visible_line=editor.FirstVisibleLine
+                        diff=last_line-first_visible_line
+                end
+        end
+        
+--~         local props1=props['line.margin.visible']
+--~         print (editor.MarginWidthN[0])
+--[[       if props['line.margin.visible'] == '0'    
+        then
+                scite.MenuCommand(IDM_LINENUMBERMARGIN)
+                props['line.margin.visible']=1
+        end ]]--
+        if editor.MarginWidthN[0] == 0    
+        then
+                scite.MenuCommand(IDM_LINENUMBERMARGIN)
+        end
+        local screen_pos=editor.FirstVisibleLine  
+	local n = 0
+	while editor.LineCount > n do
+		editor:GotoLine(n)
+		if (editor:MarkerGet(editor:LineFromPosition(editor.CurrentPos))> 0 and  parm=='marked') 
+                  or 
+                  (editor:MarkerGet(editor:LineFromPosition(editor.CurrentPos))== 0 and  parm=='unmarked')
+                then
+			if n > 0 then
+                                editor:HideLines(n,n)
+                        elseif editor:GetLine(0) ~=nil then
+ -----------                            local   len1=string.len(editor:GetLine(0))
+                                scite.SendEditor(SCI_INDICSETFORE, 0, 255)
+                                scite.SendEditor(SCI_INDICSETSTYLE, 0, INDIC_ROUNDBOX)
+                                scite.SendEditor(SCI_INDICATORFILLRANGE, 0,string.len(editor:GetLine(0))-1)
+                        end
+		end
+		n = n +1
+	end
+        editor:GotoLine(screen_pos)
+   --     props['highlight.current.word']=1
+   --     dostring('toggle_highlight_current_word()')
+end
