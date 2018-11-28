@@ -1,0 +1,28 @@
+function cut_marked()
+-- copy marked lines
+        local screen_pos=editor.FirstVisibleLine + 1 
+	local n = 0
+	all=""
+        n=editor.LineCount -1
+--~       do return end    -- for debug
+	while n >=0 do
+		editor:GotoLine(n)
+--~         print (n," <<")        
+--~ 	print(editor:GetLine(n))
+--~ 	print (editor:MarkerGet(editor:LineFromPosition(editor.CurrentPos)))
+		---if editor:MarkerGet(editor:LineFromPosition(editor.CurrentPos)) > 0 then
+		if editor:MarkerGet(n) > 0 then
+			local line=editor:GetLine(n)
+			 all=line..all
+			editor:LineDelete()
+--~                         print ("deleted")
+		end
+		n = n -1
+--~       do return end   -- DEBUG !!
+	end
+        editor:GotoLine(screen_pos)
+	print ("START-MARKED "..props.FileNameExt)
+	 all=all.."END-MARKET"
+	print(all)
+        scite.MenuCommand(IDM_BOOKMARK_CLEARALL)
+end
